@@ -102,4 +102,8 @@ public class EndlessTerrain : MonoBehaviour
             return meshObject.activeSelf;
         }
     }
+    //Esta clase se usa para renderizar con menor resolucion los chunks mas alejados, y con mayos las que estan cerca
+    class LODMesh{
+        
+    }
 }

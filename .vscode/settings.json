@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Procedural_Map_Generator_TFG.sln"
+    "dotnet.defaultSolution": "VIJIA_TFG.sln"
 }

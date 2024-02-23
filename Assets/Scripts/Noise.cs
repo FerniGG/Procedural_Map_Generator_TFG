@@ -27,13 +27,13 @@ public static class Noise
     {
         for (int x = 0; x < mapWidth; x++)
         {
-            float amplitude =1 ;
+            float amplitude = 1 ;
             float frecuency = 1;
             float noiseHeight= 0;
             for (int i = 0; i < octaves; i++)
             {
-                float sampleX = (x-halfWidth) / scale * frecuency + octaveOffsets[i].x;
-                float sampleY = (y-halfHeight) / scale * frecuency + octaveOffsets[i].y;
+                float sampleX = (x-halfWidth) / scale * frecuency + octaveOffsets[i].x * frecuency;
+                float sampleY = (y-halfHeight) / scale * frecuency - octaveOffsets[i].y * frecuency;
 
                 float perlinValue = Mathf.PerlinNoise(sampleX,sampleY) * 2 - 1;
                 noiseHeight+= perlinValue * amplitude;
