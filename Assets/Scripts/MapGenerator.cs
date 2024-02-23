@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour {
 
@@ -28,15 +29,31 @@ public class MapGenerator : MonoBehaviour {
 	public AnimationCurve meshHeightCurve;
 	public TerrainType[] regions;
 
-	public void RequestMapData(Action<MapData> callback){
+	Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
 
+	public void RequestMapData(Action<MapData> callback){
+		ThreadStart threadStart = delegate{
+			MapDataThread(callback);
+		};
+		new Thread(threadStart).Start();
 	}
 
-	public void MapDataThreads(Action<MapData> callback){
+	public void MapDataThread(Action<MapData> callback){
+		MapData mapData = GenerateMapData();
+		lock (mapDataThreadInfoQueue) //Bloquea el queue para que solo un hilo lo ejecute al mismo tiempo
+		{
+		mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback,mapData));
+		}
 
 	}
 	public void Update(){
-		
+		if(mapDataThreadInfoQueue.Count>0){
+			for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
+			{
+				MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
+				threadInfo.callback(threadInfo.parameter);
+			}
+		}
 	}
 	public void DrawMapInEditor(){
 		MapData mapData= GenerateMapData();
@@ -44,9 +61,9 @@ public class MapGenerator : MonoBehaviour {
 		if (drawMode == DrawMode.NoiseMap) {
 			display.DrawTexture (TextureGenerator.TextureFromHeightMap (mapData.heightMap));
 		} else if (drawMode == DrawMode.ColourMap) {
-			display.DrawTexture (TextureGenerator.TextureFromColourMap (mapData.colorMap, mapChunkSize, mapChunkSize));
+			display.DrawTexture (TextureGenerator.TextureFromColourMap (mapData.colourMap, mapChunkSize, mapChunkSize));
 		} else if (drawMode == DrawMode.Mesh) {
-			display.DrawMesh (MeshGenerator.GenerateTerrainMesh (mapData.heightMap,meshHeightMultiplier,meshHeightCurve,Resolution), TextureGenerator.TextureFromColourMap (mapData.colorMap, mapChunkSize, mapChunkSize));
+			display.DrawMesh (MeshGenerator.GenerateTerrainMesh (mapData.heightMap,meshHeightMultiplier,meshHeightCurve,Resolution), TextureGenerator.TextureFromColourMap (mapData.colourMap, mapChunkSize, mapChunkSize));
 		}
 	}
 
@@ -77,6 +94,15 @@ public class MapGenerator : MonoBehaviour {
 			octaves = 0;
 		}
 	}
+	struct MapThreadInfo<T>{
+		public readonly Action<T> callback;
+		public readonly T parameter;
+
+		public MapThreadInfo(Action<T> callback,T parameter){
+			this.callback=callback;
+			this.parameter=parameter;
+		}
+	}
 }
 
 [System.Serializable]
@@ -87,11 +113,11 @@ public struct TerrainType {
 }
 
 public struct MapData{
-	public float[,] heightMap;
-	public Color[] colorMap;
+	public readonly float[,] heightMap;
+	public readonly Color[] colourMap;
 
 	public MapData(float[,] heightMap,Color[] colorMap){
 		this.heightMap=heightMap;
-		this.colorMap=colorMap;
+		this.colourMap=colorMap;
 	}
 }
