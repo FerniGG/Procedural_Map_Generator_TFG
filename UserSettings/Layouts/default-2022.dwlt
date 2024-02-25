@@ -125,7 +125,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 130
+  controlID: 125
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -606,9 +606,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 5a590000
-      m_LastClickedID: 22874
-      m_ExpandedIDs: 30fbffff
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 30fbffff66590000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -962,9 +962,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -10.112097, y: 109.97031, z: 24.83848}
+    m_Target: {x: 112.03693, y: -25.694157, z: 80.615944}
     speed: 2
-    m_Value: {x: -10.112097, y: 109.97031, z: 24.83848}
+    m_Value: {x: 112.03693, y: -25.694157, z: 80.615944}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1010,13 +1010,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Target: {x: 0.085064374, y: -0.90631735, z: 0.2197724, w: 0.35079324}
     speed: 2
-    m_Value: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Value: {x: 0.085064255, y: -0.90631604, z: 0.21977209, w: 0.35079274}
   m_Size:
-    m_Target: 2776.1672
+    m_Target: 43.530415
     speed: 2
-    m_Value: 2656.6194
+    m_Value: 43.530415
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1119,8 +1119,8 @@ MonoBehaviour:
       y: 21
       width: 268
       height: 167
-    m_Scale: {x: 3.1827006, y: 3.1827}
-    m_Translation: {x: 104.590225, y: -18.596811}
+    m_Scale: {x: 3.182701, y: 3.1826997}
+    m_Translation: {x: 104.59024, y: -18.596811}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -1128,9 +1128,9 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -32.8621
-      y: 5.843093
-      width: 84.205215
-      height: 52.471172
+      y: 5.8430934
+      width: 84.20521
+      height: 52.471176
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_LastWindowPixelSize: {x: 268, y: 188}
