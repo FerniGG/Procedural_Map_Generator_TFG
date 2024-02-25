@@ -19,7 +19,7 @@ public class EndlessTerrain : MonoBehaviour
     int chunksVisibleInViewDst;
 
     Dictionary<Vector2,TerrainChunk>terrainChunkDictionary=new Dictionary<Vector2,TerrainChunk>();
-    List<TerrainChunk> terrainChunksVisibleLastUpdate = new List<TerrainChunk>(); 
+    static List<TerrainChunk> terrainChunksVisibleLastUpdate = new List<TerrainChunk>(); 
     
     void Start(){
         mapGenerator = FindAnyObjectByType<MapGenerator>();
@@ -57,9 +57,10 @@ public class EndlessTerrain : MonoBehaviour
                 Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset,currentChunkCoordY + yOffset);
                 if(terrainChunkDictionary.ContainsKey(viewedChunkCoord)){
                     terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
-                    if(terrainChunkDictionary[viewedChunkCoord].IsVisible()){
+
+                    /*if(terrainChunkDictionary[viewedChunkCoord].IsVisible()){
                         terrainChunksVisibleLastUpdate.Add(terrainChunkDictionary[viewedChunkCoord]);
-                    }
+                    }*/ //GENERA QUE lo chunks de la mesh que no esten visibles se sigan renderizando.
                 }else{
                     terrainChunkDictionary.Add(viewedChunkCoord,new TerrainChunk(viewedChunkCoord,chunkSize,detailLevels,transform,mapMaterial));
                 }
@@ -142,6 +143,7 @@ public class EndlessTerrain : MonoBehaviour
                     resolutionMesh.RequestMesh(mapData);
                 }
             }
+            terrainChunksVisibleLastUpdate.Add(this);
           }
           SetVisible(visible);
             }
@@ -169,6 +171,7 @@ public class EndlessTerrain : MonoBehaviour
         public void OnMeshDataReceived(MeshData meshData){
             mesh = meshData.CreateMesh();
             hasMesh = true;
+            updateCallback();
         }
         public void RequestMesh(MapData mapData){
             hasRequestedMesh = true;
