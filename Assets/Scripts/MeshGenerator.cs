@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public static class MeshGenerator {
 
 	public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve _heightCurve, int levelOfDetail) {
@@ -55,13 +55,42 @@ public class MeshData {
 		triangles [triangleIndex + 2] = c;
 		triangleIndex += 3;
 	}
+		public Vector3[] CalculateNormals(){
+		Vector3[] vertexNormals  = new Vector3[vertices.Length];
+		int triangleCount = triangles.Length / 3;
+		for (var i = 0; i < triangleCount; i++) // POR CADA TRIANGULO EN EL MESH
+		{
+			int normalTriangleIndex= i * 3;
+			int vertexIndexA=triangles[normalTriangleIndex];
+			int vertexIndexB=triangles[normalTriangleIndex+1];
+			int vertexIndexC=triangles[normalTriangleIndex+2];
 
+			Vector3 triangleNormal = SurfaceNormalFromIndices(vertexIndexA,vertexIndexB,vertexIndexC);
+			vertexNormals[vertexIndexA]+=triangleNormal;
+			vertexNormals[vertexIndexB]+=triangleNormal;
+			vertexNormals[vertexIndexC]+=triangleNormal;
+		}
+		for (var i = 0; i < vertexNormals.Length; i++)
+		{
+			vertexNormals[i].Normalize();
+		}
+		return vertexNormals;
+	}
+	public Vector3 SurfaceNormalFromIndices(int indexA,int indexB,int indexC){
+		Vector3 pA=vertices[indexA];
+		Vector3 pB=vertices[indexB];
+		Vector3 pC=vertices[indexC];
+		
+		Vector3 AB = pB - pA;
+		Vector3 AC = pC - pA;
+		return Vector3.Cross(AB,AC).normalized;
+	}
 	public Mesh CreateMesh() {
 		Mesh mesh = new Mesh ();
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
 		mesh.uv = uvs;
-		mesh.RecalculateNormals ();
+		mesh.normals = CalculateNormals();
 		return mesh;
 	}
 
